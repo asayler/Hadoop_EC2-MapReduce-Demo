@@ -4,6 +4,31 @@ By Andy Sayler
 www.andysayler.com
 Created April 2012
 
+***Directories***
+code - Code and Scripts for the project
+data - You will need to create this directory and store your input data here.
+       For this project, the enwiki-20090810-all-titles-in-ns0 data file from
+       the Wikipedia XML data set (http://aws.amazon.com/datasets/2506) was used.
+       If you wish to use a different data file, the scripts will need updated
+       accordingly.
+
+***Files***
+README                   - This file
+code/build.sh            - A bash script to build the MapReduce java code (run on cluster)
+code/display.sh          - A bash script to display the 25 most frequent results (run on cluster)
+code/grab.sh             - A bash script to copy the results from the Hadoop DFS to the data folder (run on cluster)
+code/run-count.sh        - A bash script to run the count MapReduce program (run on cluster)
+code/run-sort.sh         - A bash script to run the sort MapReduce program (run on cluster)
+code/WikiTitleCount.java - The count MapReduce program (run on cluster)
+code/WikiTitleSort.java  - The sort MapReduce program (run on cluster)
+data/part-00000          - Output file from sort operation (provided via grab.sh)
+data/enwiki-20090810-all-titles-in-ns0 - English Wikipedia article title input data (08-10-2009)
+
+***Prerequisites***
+1. http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/Welcome.html
+2. http://docs.amazonwebservices.com/AWSEC2/latest/UserGuide/SettingUp_CommandLine.html
+3. http://wiki.apache.org/hadoop/AmazonEC2
+
 ***Command Flow (Assume ./ Local Working Directory)***
 1. Start Cluster: hadoop-ec2 launch-cluster test-cluster 11
 2. Upload Files:
@@ -24,8 +49,8 @@ Created April 2012
 7. Stop Cluster: hadoop-ec2 terminate-cluster test-cluster
 
 ***Cluster Web Monitoring***
-http://<Cluster Master FQDN>:50030 - jobtracker
-http://<Cluster Master FQDN>:50070 - DFS health
+http://<Cluster Master FQDN>:50030 - Cluster Job Tracker
+http://<Cluster Master FQDN>:50070 - Cluster DFS Health
 
 ***External Resources***
 EC2 Basic Setup: http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/Welcome.html
