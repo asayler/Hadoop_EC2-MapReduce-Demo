@@ -1,0 +1,45 @@
+Hadoop MapReduce Demo
+Purpose: Count First Words in English Wikipedia Article Titles and Sort by Frequency
+By Andy Sayler
+www.andysayler.com
+Created April 2012
+
+***Command Flow (Assume ./ Local Working Directory)***
+1. Start Cluster: hadoop-ec2 launch-cluster test-cluster 11
+2. Upload Files:
+   2a. Upload Code: rsync -avz -e "ssh -i ../id_rsa-AWS-EC2-USEast1-KeyPair1" ./code root@<Cluster Master FQDN>:~/
+   2b. Upload Data: rsync -avz -e "ssh -i ../id_rsa-AWS-EC2-USEast1-KeyPair1" ./data root@<Cluster Master FQDN>:~/
+3. Login to Master: hadoop-ec2 login test-cluster
+4. Run Code on Cluster
+   4a. Change Working Directory: cd ~/code
+   4b. Build Code: ./build.sh
+   4c. Run Count Map-Reduce: ./run-count.sh
+   4d. Run Sort Map-Reduce: ./run-sort.sh
+   4e. Show Top Results: ./display.sh
+   4f. Copy Results to Data Directory: ./grab.sh
+   4f. View Top Results in Data Directory: tail ~/data/part-00000
+5. Logout of Master: exit
+6. Download Files
+   6a. Download Data: rsync -avz -e "ssh -i ../id_rsa-AWS-EC2-USEast1-KeyPair1" root@<Cluster Master FQDN>:~/data ./
+7. Stop Cluster: hadoop-ec2 terminate-cluster test-cluster
+
+***Cluster Web Monitoring***
+http://<Cluster Master FQDN>:50030 - jobtracker
+http://<Cluster Master FQDN>:50070 - DFS health
+
+***External Resources***
+EC2 Basic Setup: http://docs.amazonwebservices.com/AWSEC2/latest/GettingStartedGuide/Welcome.html
+EC2 CLI Setup: http://docs.amazonwebservices.com/AWSEC2/latest/UserGuide/SettingUp_CommandLine.html
+EC2 CLI Reference: http://docs.amazonwebservices.com/AmazonEC2/gsg/2007-01-03/
+Hadoop EC2 Setup: http://wiki.apache.org/hadoop/AmazonEC2
+Hadoop MapReduce Tutorial: http://hadoop.apache.org/common/docs/current/mapred_tutorial.html
+
+***Data***
+Amazon Public Data: http://aws.amazon.com/datasets
+Wikipedia Data: http://aws.amazon.com/datasets/2506 (enwiki-20090810-all-titles-in-ns0.gz used for this example)
+
+***Mount Data Bin***
+Create Volume (On Localhost): ec2-create-volume --snapshot snap-<SnapID> -z us-east-1a
+Attach Volume (On Localhost): ec2-attach-volume vol-<VolID> -i i-<MasterID> -d /dev/<BlockDevID>
+Make Mount Point (On Cluster Master): mkdir /mnt/<DataName>
+Mount Data (On Cluster Master): mount /dev/<BlockDevID> /mnt/<DataName>
